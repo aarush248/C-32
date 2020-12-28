@@ -12,6 +12,8 @@ var gameState = "onSling";
 
 function preload() {
     backgroundImg = loadImage("sprites/bg.png");
+    //getTime()
+    backgroundChange()
 }
 
 function setup(){
@@ -44,19 +46,28 @@ function setup(){
     slingshot = new SlingShot(bird.body,{x:200, y:50});
 }
 
+var score = 0
+
 function draw(){
+    if(backgroundImg)
     background(backgroundImg);
+
+    textSize(24);
+    fill("white")
+    text("score:"+score, 300, 50)
     Engine.update(engine);
     //strokeWeight(4);
     box1.display();
     box2.display();
     ground.display();
     pig1.display();
+    pig1.score()
     log1.display();
 
     box3.display();
     box4.display();
     pig3.display();
+    pig3.score()
     log3.display();
 
     box5.display();
@@ -85,4 +96,29 @@ function keyPressed(){
     if(keyCode === 32){
        // slingshot.attach(bird.body);
     }
+}
+
+/*async function getTime(){
+    var response = await fetch ("http://worldclockapi.com/api/json/est/now")
+    var responsejson = await response.json()
+    //console.log(responsejson.currentDateTime)
+
+    var dateTime = responsejson.currentDateTime
+
+    var hours = dateTime.slice(11,13)
+    console.log(hours)
+}*/
+
+async function backgroundChange(){
+    var response = await fetch ("http://worldclockapi.com/api/json/est/now")
+   
+    var responsejson = await response.json()
+    var dateTime = responsejson.currentDateTime
+    var hours = dateTime.slice(11,13)
+    if(hours>=6 && hours<=17){
+        bg = "sprites/bg.png"
+    } else{
+        bg = "sprites/bg2.jpg"
+    }
+    backgroundImg = loadImage(bg)
 }
